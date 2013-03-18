@@ -1,6 +1,6 @@
 'use strict';
 
-var eventjugglerModule = angular.module('eventjuggler', [ 'eventjugglerServices', 'ngCookies' ]);
+var eventjugglerModule = angular.module('eventjuggler', [ 'eventjugglerServices', 'ngCookies', 'ngSanitize' ]);
 var loadCount = 0;
 
 eventjugglerModule.config([ '$routeProvider', function($routeProvider) {

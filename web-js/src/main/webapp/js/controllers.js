@@ -40,7 +40,7 @@ function EventMineCtrl($scope, Event) {
     $scope.events = Event.getEventsUser();
 }
 
-function EventDetailCtrl($scope, $routeParams, Event, User) {
+function EventDetailCtrl($scope, $routeParams, Event, User, Portlet) {
     $scope.event = Event.getEvent($routeParams.eventId);
 
     $scope.related = Event.getEventsRelated($routeParams.eventId);
@@ -56,6 +56,10 @@ function EventDetailCtrl($scope, $routeParams, Event, User) {
             $scope.event = Event.getEvent($routeParams.eventId);
         });
     };
+
+    $scope.map = Portlet.getPortletMarkup("GoogleMap");
+
+    $scope.weather = Portlet.getPortletMarkup("GoogleWeather");
 }
 
 

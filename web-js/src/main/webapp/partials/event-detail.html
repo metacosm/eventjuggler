@@ -1,9 +1,13 @@
 <div class="container eventDetail">
-    <div style="float: left; width: 20%; margin-top: 2em;">
+    <div style="float: left; width: 25%; margin-top: 2em;">
         <img ng-src="{{event.imageId}}"></img>
         <p>{{event.location.city}}, {{event.location.country | uppercase}}</p>
         <p>{{event.time | date:'mediumDate'}} - {{event.time | date:'shortTime'}}</p>
         <p>{{event.attendingCount}} attending</p>
+
+        <div ng-bind-html="map.body" style="border: 1px #aaa solid"></div>
+        <div ng-bind-html="weather.body" style="border: 1px #aaa solid"></div>
+
         <p>
             <button ng-show="user.loggedIn && !event.attending" class="btn" ng-click="attend()">Attend</button>
             <button ng-show="user.loggedIn && event.attending" class="btn" ng-click="resign()">Resign</button>
@@ -12,11 +16,11 @@
     <div style="float: left; width: 50%; margin-left: 5%; margin-right: 5%;">
         <h2>{{event.title}}</h2>
 
-        <p ng-bind-html-unsafe="event.description"></p>
+        <p ng-bind-html="event.description"></p>
 
         <h3>{{event.organizerGroup.name}}</h3>
 
-        <div ng-bind-html-unsafe="event.organizerGroup.description"></div>
+        <div ng-bind-html="event.organizerGroup.description"></div>
 
         <p style="margin-top: 2em;">
             <a ng-repeat="tag in event.tags" class="btn" href="#/events?tags={{tag}}">{{tag}}</a>
