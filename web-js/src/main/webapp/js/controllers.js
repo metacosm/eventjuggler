@@ -3,7 +3,7 @@
 function EventListCtrl($scope, Event, $routeParams, $location) {
     $scope.events = Event.getEvents(function loadUntilPageIsFull(events) {
         $scope.events = events;
-        $scope.$watch('events', function() {
+        $scope.$watch('events', function () {
             if ($("body").height() < $(window).height() && !$scope.events.completed) {
                 $scope.events.loadNext(loadUntilPageIsFull);
             }
@@ -12,7 +12,7 @@ function EventListCtrl($scope, Event, $routeParams, $location) {
 
     $scope.popular = Event.getEventsPopular();
 
-    $(window).scroll(function() {
+    $(window).scroll(function () {
         if ($(window).scrollTop() == $(document).height() - $(window).height()) {
             $scope.loading = true;
             $scope.events.loadNext();
@@ -20,9 +20,9 @@ function EventListCtrl($scope, Event, $routeParams, $location) {
     });
 
     var currentPath = $location.path();
-    $scope.$watch(function() {
+    $scope.$watch(function () {
         return $location.path();
-    }, function() {
+    }, function () {
         if ($location.path() != currentPath) {
             $(window).unbind("scroll");
         }
@@ -30,7 +30,7 @@ function EventListCtrl($scope, Event, $routeParams, $location) {
 }
 
 function EventSearchCtrl($scope, Event, $location) {
-    $scope.search = function() {
+    $scope.search = function () {
         $location.url("/events?query=" + $scope.query);
         delete $scope.query;
     };
@@ -45,21 +45,32 @@ function EventDetailCtrl($scope, $routeParams, Event, User, Portlet) {
 
     $scope.related = Event.getEventsRelated($routeParams.eventId);
 
-    $scope.attend = function() {
-        Event.attend($scope.event.id, function() {
+    $scope.attend = function () {
+        Event.attend($scope.event.id, function () {
             $scope.event = Event.getEvent($routeParams.eventId);
         });
     };
 
-    $scope.resign = function() {
-        Event.resign($scope.event.id, function() {
+    $scope.resign = function () {
+        Event.resign($scope.event.id, function () {
             $scope.event = Event.getEvent($routeParams.eventId);
         });
     };
 
-    $scope.map = Portlet.getPortletMarkup("GoogleMap");
+    $scope.map = '';
+    $scope.weather = '';
+    $scope.showMap = false;
+    $scope.showWeather = false;
 
-    $scope.weather = Portlet.getPortletMarkup("GoogleWeather");
+    $scope.show = function (zipcode, mapOrWeather) {
+        if ('map' == mapOrWeather) {
+            $scope.showMap = true;
+            $scope.map = Portlet.getPortletMarkup("GoogleMap", zipcode);
+        } else if ('weather' == mapOrWeather) {
+            $scope.showWeather = true;
+            $scope.weather = Portlet.getPortletMarkup("GoogleWeather", zipcode);
+        }
+    }
 }
 
 
@@ -80,13 +91,13 @@ function sendMainPageError() {
 function UserCtrl($scope, User, $location) {
     $scope.user = User;
 
-    $scope.login = function() {
+    $scope.login = function () {
         $scope.failed = false;
 
-        User.login(function() {
+        User.login(function () {
             $('#loginModal').modal('hide');
             $location.path('/events');
-        }, function() {
+        }, function () {
             $scope.failed = true;
         });
     };
@@ -94,16 +105,16 @@ function UserCtrl($scope, User, $location) {
     $scope.loginFacebook = function () {
         $scope.failed = false;
 
-        loginSuccess = function() {
-            User.loginFacebook(function() {
+        loginSuccess = function () {
+            User.loginFacebook(function () {
                 $('#loginModal').modal('hide');
                 $location.path('/events');
-            }, function() {
+            }, function () {
                 $scope.failed = true;
             });
         }
 
-        loginFailed = function() {
+        loginFailed = function () {
             $scope.failed = true;
         }
 
@@ -114,11 +125,11 @@ function UserCtrl($scope, User, $location) {
     $scope.loginTwitter = function () {
         $scope.failed = false;
 
-        loginSuccess = function() {
-            User.loginTwitter(function() {
+        loginSuccess = function () {
+            User.loginTwitter(function () {
                 $('#loginModal').modal('hide');
                 $location.path('/events');
-            }, function() {
+            }, function () {
                 $scope.failed = true;
             });
         }
@@ -131,14 +142,14 @@ function UserCtrl($scope, User, $location) {
 function RegisterCtrl($scope, User) {
     $scope.u = {};
 
-    $scope.register = function() {
+    $scope.register = function () {
         $scope.registered = false;
         $scope.failed = false;
 
-        User.register($scope.u, function(response) {
+        User.register($scope.u, function (response) {
             $scope.registered = true;
             $scope.u = {};
-        }, function(status) {
+        }, function (status) {
             $scope.failed = true;
             $scope.failedMessage = status;
         });

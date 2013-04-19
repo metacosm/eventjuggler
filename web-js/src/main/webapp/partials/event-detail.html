@@ -5,8 +5,12 @@
         <p>{{event.time | date:'mediumDate'}} - {{event.time | date:'shortTime'}}</p>
         <p>{{event.attendingCount}} attending</p>
 
-        <div ng-bind-html="map.body" style="border: 1px #aaa solid"></div>
-        <div ng-bind-html="weather.body" style="border: 1px #aaa solid"></div>
+        <div ng-click="show(event.location.zip, 'map')"><em>Map</em>
+            <div ng-show="showMap" ng-bind-html="map.body" style="border: 1px #aaa solid"></div>
+        </div>
+        <div ng-click="show(event.location.zip, 'weather')"><em>Weather</em>
+            <div ng-show="showWeather" ng-bind-html="weather.body" style="border: 1px #aaa solid"></div>
+        </div>
 
         <p>
             <button ng-show="user.loggedIn && !event.attending" class="btn" ng-click="attend()">Attend</button>

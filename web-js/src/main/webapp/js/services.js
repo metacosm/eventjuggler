@@ -240,13 +240,14 @@ eventjugglerServices.service('Event', function ($resource, User, $http, $routePa
 });
 
 eventjugglerServices.service('Portlet', function ($resource) {
-    var portletRes = $resource('http://localhost\\:8080/samples-google-portlet/:portletId?zipcode=77056');
+    var portletRes = $resource('http://localhost\\:8080/samples-google-portlet/:portletId?zipcode=:zipCode');
 
-    this.getPortletMarkup = function (portletId) {
+    this.getPortletMarkup = function (portletId, zipCode) {
         var markup = {};
 
         portletRes.get({
-            "portletId": portletId
+            "portletId": portletId,
+            "zipCode": zipCode
         }, function (data) {
 //            markup = data["body"];
             for (var i in data) {
